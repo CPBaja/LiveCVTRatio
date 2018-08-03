@@ -1,16 +1,16 @@
 /*
 	LiveSpeed.ino - Main code to display live CVT ratio.
-	Created by Rahul Goyal and Tyler Davis, March 31, 2018.
+	Created by Rahul Goyal and Tyler Davis, February 15, 2018.
 	Released to Cal Poly Baja SAE. ;)
 */
 
-#include "LiveDisplay.h"
-#include "WheelSpeed.h"
+#include <LiveDisplay.h>
+#include <WheelSpeed.h>
 
-const int R_PORT = 2;
-const int E_PORT = 3;
+const int R_PORT = 3;
+const int E_PORT = 2;
 
-const float GEARRATIO = 6.221;
+const float GEARRATIO = 6.579;
 
 const int CHARS = 3;
 

@@ -18,6 +18,7 @@ const int CHARS = 3;
 WheelSpeed rWheel = WheelSpeed(12);
 WheelSpeed engine = WheelSpeed(4);
 
+float cvtRatio;
 
 
 void setup() {
@@ -41,35 +42,31 @@ void setup() {
 }
 
 
-
 void loop() {
-
-	float engineSpeed = engine.getRPS();
-	float rWheelSpeed = rWheel.getRPS();
-
+	noInerrupts();
 	// Calculate CVT ratio
-	if (rWheelSpeed != 0) {
-		float cvtRatio = engineSpeed / (rWheelSpeed * GEARRATIO);
+	if (rWheel.getRPS() != 0) {
+		cvtRatio = engine.getRPS() / (rWheel.getRPS() * GEARRATIO);
+		}
+	else{
+		cvrRatio = -1;
+	}
+	Interrupts();
 		// Update display
 		myDisplay.clear();
 		myDisplay.title(" CVT Ratio");
+	if(rWheelSpeed != -1)
 		myDisplay.write(cvtRatio, CHARS);
 	} else {
-		String cvtRatio = "-----";
-		// Update display
-		myDisplay.clear();
-		myDisplay.title(" CVT Ratio");
-		myDisplay.write(cvtRatio, CHARS);
+		myDisplay.write("----", CHARS);
 	}
 
 }
 
 
-
 void rWheelISR() {
 	rWheel.calcRPS();
 }
-
 
 
 void engineISR() {

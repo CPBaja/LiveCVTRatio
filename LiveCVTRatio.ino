@@ -49,13 +49,13 @@ void loop() {
 		cvtRatio = engine.getRPS() / (rWheel.getRPS() * GEARRATIO);
 		}
 	else{
-		cvrRatio = -1;
+		cvtRatio = -1;
 	}
 	Interrupts();
 		// Update display
 		myDisplay.clear();
 		myDisplay.title(" CVT Ratio");
-	if(rWheelSpeed != -1)
+	if(cvtRatio != -1)
 		myDisplay.write(cvtRatio, CHARS);
 	} else {
 		myDisplay.write("----", CHARS);

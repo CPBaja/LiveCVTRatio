@@ -4,15 +4,15 @@
 	Released to Cal Poly Baja SAE. ;)
 */
 
-#include <LiveDisplay.h>
-#include <WheelSpeed.h>
+#include "LiveDisplay.h"
+#include "WheelSpeed.h"
 
-const int R_PORT = 3;
-const int E_PORT = 2;
+const byte E_PORT = 2;
+const byte R_PORT = 3;
 
-const float GEARRATIO = 6.579;
+const float GEAR_RATIO = 6.579;
 
-const int CHARS = 3;
+const byte CHARS = 3;
 
 // Instantiate front wheel speed
 WheelSpeed rWheel = WheelSpeed(12);
@@ -28,12 +28,12 @@ void setup() {
 	// 	;	// Wait for serial port to connect. Needed for native USB port only.
 	// }
 
-	// Set up rear wheel
-	const int rWheelInterrupt = digitalPinToInterrupt(R_PORT);
-	attachInterrupt(rWheelInterrupt, rWheelISR, RISING);
 	// Set up engine
-	const int engineInterrupt = digitalPinToInterrupt(E_PORT);
+	const byte engineInterrupt = digitalPinToInterrupt(E_PORT);
 	attachInterrupt(engineInterrupt, engineISR, RISING);
+	// Set up rear wheel
+	const byte rWheelInterrupt = digitalPinToInterrupt(R_PORT);
+	attachInterrupt(rWheelInterrupt, rWheelISR, RISING);
 
 	// Set up display
 	myDisplay.begin();
@@ -47,19 +47,15 @@ void loop() {
 	float engineSpeed = engine.getRPS();
 	float rWheelSpeed = rWheel.getRPS();
 
+	// Update display
+	myDisplay.clear();
+	myDisplay.title(" CVT Ratio");
 	// Calculate CVT ratio
-	if (rWheelSpeed != 0) {
-		float cvtRatio = engineSpeed / (rWheelSpeed * GEARRATIO);
-		// Update display
-		myDisplay.clear();
-		myDisplay.title(" CVT Ratio");
-		myDisplay.write(cvtRatio, CHARS);
+	if (rWheelSpeed) {
+    Serial.println(engineSpeed / (GEAR_RATIO * rWheelSpeed));
+		myDisplay.write(engineSpeed / (GEAR_RATIO * rWheelSpeed), CHARS);
 	} else {
-		String cvtRatio = "-----";
-		// Update display
-		myDisplay.clear();
-		myDisplay.title(" CVT Ratio");
-		myDisplay.write(cvtRatio, CHARS);
+		myDisplay.write("---", CHARS);
 	}
 
 }

@@ -7,14 +7,14 @@
 #include "LiveDisplay.h"
 #include "WheelSpeed.h"
 
-const byte E_PORT = 2;
-const byte R_PORT = 3;
+const byte E_PIN = 2;
+const byte R_PIN = 3;
 
 const float GEAR_RATIO = 6.579;
 
 const byte CHARS = 3;
 
-// Instantiate front wheel speed
+// Instantiate WheelSpeed objects
 WheelSpeed rWheel = WheelSpeed(12);
 WheelSpeed engine = WheelSpeed(4);
 
@@ -29,10 +29,10 @@ void setup() {
 	// }
 
 	// Set up engine
-	const byte engineInterrupt = digitalPinToInterrupt(E_PORT);
+	const byte engineInterrupt = digitalPinToInterrupt(E_PIN);
 	attachInterrupt(engineInterrupt, engineISR, RISING);
 	// Set up rear wheel
-	const byte rWheelInterrupt = digitalPinToInterrupt(R_PORT);
+	const byte rWheelInterrupt = digitalPinToInterrupt(R_PIN);
 	attachInterrupt(rWheelInterrupt, rWheelISR, RISING);
 
 	// Set up display
@@ -44,8 +44,8 @@ void setup() {
 
 void loop() {
 
-	float engineSpeed = engine.getRPS();
-	float rWheelSpeed = rWheel.getRPS();
+	float engineSpeed = engine.get();
+	float rWheelSpeed = rWheel.get();
 
 	// Update display
 	myDisplay.clear();
@@ -63,11 +63,11 @@ void loop() {
 
 
 void rWheelISR() {
-	rWheel.calcRPS();
+	rWheel.calc();
 }
 
 
 
 void engineISR() {
-	engine.calcRPS();
+	engine.calc();
 }
